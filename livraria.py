@@ -1,34 +1,18 @@
-#by : Marcelo dos Santos
+#by: Marcelo dos Santos
 class Livraria:
     def __init__(self, arq):
         self.arq = arq
-        self.arquivoexiste = False
         self.livros = dict()
 
-        for c in open(self.arq):
-            c = c.strip().split(';')
-            c[2] = c[2].replace('\n', '')
-            self.livros[c[0]] = c[1].strip().lower(), c[2].strip().lower()
-
-
-    def arquivo_existe(self):
-        try:
-            a = open(self.arq, 'rt')
-            a.close()
-        except FileNotFoundError:
-            print('Arquivo {} não existe! '.format(self.arq))
-
-        else:
-            self.arquivoexiste = True
     def criar_arquivo(self):
-        if not self.arquivoexiste:
-            try:
-                a = open(self.arq, 'wt+')
-                a.close()
-            except:
-                print('Erro ao criar o arquivo {}'.format(self.arq))
-            else:
-                print('Arquivo criado com sucesso!')
+        try:
+            a = open(self.arq, 'wt+')
+            a.close()
+
+        except:
+            print('Erro ao criar o arquivo {}'.format(self.arq))
+        else:
+            print('Arquivo criado com sucesso!')
 
     def add_livros(self, nome, autor, tipo='<desconhecido>'):
         try:
@@ -42,16 +26,17 @@ class Livraria:
                 print('Erro ao adcionar livro e autor')
             else:
                 print('Livro adcionado com sucesso ao banco de dados!')
+        a.close()
 
 
     def livros_disponiveis(self):
         print('{:^66}'.format('Lista de livros disponiveis'))
         print('='*66)
         #esse for vai ficar aqui ate eu pensar em um lugar melhor pra colocar ele, mas n deve ficar aqui
-        """for c in open(self.arq):
+        for c in open(self.arq):
             c = c.strip().split(';')
             c[2] = c[2].replace('\n', '')
-            self.livros[c[0]] = c[1].strip().lower(), c[2].strip().lower()"""
+            self.livros[c[0]] = c[1].strip().lower(), c[2].strip().lower()
         for livro in self.livros.items():
             print('Titulo: {}; Autor(a): {}; Tipo: {}'.format(livro[0], livro[1][0], livro[1][1]))
 
@@ -75,8 +60,8 @@ class Livraria:
             print('-'*50)
             print('Parce que vc tentou procurar um livro pelo titulo!')
             print('resultado da pesquisa:')
-            for livros in self.livros:
-                if op == livros:
+            for livros in self.livros.keys():
+                if livros == op:
                     print('\033[1;32mtitulo:', livros, '\033[mautor: {}; tipo: {}'.format(*self.livros[livros]))
 
         #se tentar buscar livro pelo o que se parece ser um autor
@@ -92,7 +77,7 @@ class Livraria:
             print('Parece que você tentou procurar por tipo de filme!')
             print('resultado da pesquisa:')
             for i in self.livros:
-                if self.livros[i][1] == op:
+                if self.livros[i][1].lower() == op.lower():
                     print('titulo: {}; autor: {}; \033[1;33mtipo: {}\033[m'.format(i, self.livros[i][0], self.livros[i][1]))
 
         #se nenhuma especificação do livro não se encontrar no "bando de dados"
@@ -101,6 +86,8 @@ class Livraria:
 
 #programa principal
 l = Livraria('livraria.txt')
+
+l.criar_arquivo()
 while True:
     print('{:^60}'.format('Livraria'))
     print('-'*60)
@@ -117,8 +104,6 @@ while True:
                 autor = input('Digite o nome do autor do livro')
                 tipo = input('Digite o tipo do livro')
                 l.add_livros(titulo, autor, tipo)
-            else:
-                continue
 
         l.livros_disponiveis()
     elif opç == 2:
@@ -135,3 +120,5 @@ while True:
         break
     else:
         print('Digite uma opção correta!')
+
+#Atenção, o condeudo do arquivo está se apagando sempre que rodar o programa
