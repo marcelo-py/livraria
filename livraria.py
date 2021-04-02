@@ -4,10 +4,12 @@ class Livraria:
         self.arq = arq
         self.arquivoexiste = False
         self.livros = dict()
+
         for c in open(self.arq):
             c = c.strip().split(';')
             c[2] = c[2].replace('\n', '')
             self.livros[c[0]] = c[1].strip().lower(), c[2].strip().lower()
+
 
     def arquivo_existe(self):
         try:
@@ -72,7 +74,7 @@ class Livraria:
         if op in titulo and op not in autor and tipo:
             print('-'*50)
             print('Parce que vc tentou procurar um livro pelo titulo!')
-            print('resultados')
+            print('resultado da pesquisa:')
             for livros in self.livros:
                 if op == livros:
                     print('\033[1;32mtitulo:', livros, '\033[mautor: {}; tipo: {}'.format(*self.livros[livros]))
@@ -80,21 +82,22 @@ class Livraria:
         #se tentar buscar livro pelo o que se parece ser um autor
         elif op in autor and op not in tipo and op not in titulo:
             print('Parece que você tentou  procurar por autor')
+            print('resultado da pesquisa:')
             for l in self.livros:
                 if self.livros[l][0] == op:
                     print('titulo: {}; \033[1;33mautor: {}\033[m; tipo: {}'.format(l, self.livros[l][0], self.livros[l][1]))
 
         #se tentar buscar livro pelo que se parece um tipo de livro
         elif op in tipo and op not in titulo and op not in autor:
-            print('Parece que vc tentou procurar por tipo de filme!')
+            print('Parece que você tentou procurar por tipo de filme!')
+            print('resultado da pesquisa:')
             for i in self.livros:
                 if self.livros[i][1] == op:
                     print('titulo: {}; autor: {}; \033[1;33mtipo: {}\033[m'.format(i, self.livros[i][0], self.livros[i][1]))
 
         #se nenhuma especificação do livro não se encontrar no "bando de dados"
         else:
-            print('Nada encontrado!')
-
+            print('Nenhum resultado encontrado!')
 
 #programa principal
 l = Livraria('livraria.txt')
@@ -107,6 +110,16 @@ while True:
     0 - Sair
     =>'''))
     if opç == 1:
+        if len(l.livros) == 0:
+            sn = input('Não há livros disponiveis na biblieoteca, deseja adicionar? Sim<S/N>Não')[0].upper()
+            if sn == 'S':
+                titulo = input('Digite o titulo do livro')
+                autor = input('Digite o nome do autor do livro')
+                tipo = input('Digite o tipo do livro')
+                l.add_livros(titulo, autor, tipo)
+            else:
+                continue
+
         l.livros_disponiveis()
     elif opç == 2:
         titulo = input('Digite o titulo do livro')
@@ -114,12 +127,11 @@ while True:
         tipo = input('Digite o tipo do livro')
         if len(autor) == 0:
             autor = 'desconhecido'
-        l.add_livros(titulo.lower(), autor.lower(), tipo)
+        l.add_livros(titulo.strip(), autor.strip(), tipo.strip())
     elif opç == 3:
-        proc = input('Digite um titulo, autor ou tipo de livro ')
+        proc = input('Digite um titulo, autor ou tipo de livro ').lower()
         l.procurar(proc)
     elif opç == 0:
         break
     else:
         print('Digite uma opção correta!')
-#não acabou >,< hehe falta tratar algumas coisas
