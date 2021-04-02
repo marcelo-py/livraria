@@ -2,17 +2,29 @@
 class Livraria:
     def __init__(self, arq):
         self.arq = arq
+        self.arquivoexiste = False
         self.livros = dict()
 
-    def criar_arquivo(self):
+    def arquivo_existe(self):
         try:
-            a = open(self.arq, 'wt+')
+            a = open(self.arq, 'rt')
             a.close()
-
-        except:
-            print('Erro ao criar o arquivo {}'.format(self.arq))
+        except FileNotFoundError:
+            print('Aruivo não existe!')
         else:
-            print('Arquivo criado com sucesso!')
+            self.arquivoexiste = True
+
+
+    def criar_arquivo(self):
+        if not self.arquivoexiste:
+            try:
+                a = open(self.arq, 'wt+')
+                a.close()
+
+            except:
+                print('Erro ao criar o arquivo {}'.format(self.arq))
+            else:
+                print('Arquivo criado com sucesso!')
 
     def add_livros(self, nome, autor, tipo='<desconhecido>'):
         try:
@@ -26,7 +38,6 @@ class Livraria:
                 print('Erro ao adcionar livro e autor')
             else:
                 print('Livro adcionado com sucesso ao banco de dados!')
-        a.close()
 
 
     def livros_disponiveis(self):
@@ -86,7 +97,7 @@ class Livraria:
 
 #programa principal
 l = Livraria('livraria.txt')
-
+l.arquivo_existe()
 l.criar_arquivo()
 while True:
     print('{:^60}'.format('Livraria'))
@@ -120,5 +131,4 @@ while True:
         break
     else:
         print('Digite uma opção correta!')
-
 #Atenção, o condeudo do arquivo está se apagando sempre que rodar o programa
