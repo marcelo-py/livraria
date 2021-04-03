@@ -99,6 +99,7 @@ class Livraria:
 l = Livraria('livraria.txt')
 l.arquivo_existe()
 l.criar_arquivo()
+l.livros_disponiveis()
 while True:
     print('{:^60}'.format('Livraria'))
     print('-'*60)
