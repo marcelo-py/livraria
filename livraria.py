@@ -132,4 +132,3 @@ while True:
         break
     else:
         print('Digite uma opção correta!')
-#Atenção, o condeudo do arquivo está se apagando sempre que rodar o programa
